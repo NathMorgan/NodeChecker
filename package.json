@@ -1,0 +1,13 @@
+{
+  "name": "fursuit_check",
+  "version": "0.0.1",
+  "dependencies": {
+    "crawler": "0.4.3",
+    "cron": "0.3.1",
+    "winston": "*",
+    "crypto": "*",
+    "nodemailer": "1.10.0",
+    "nodemailer-smtp-transport": "1.0.4",
+    "xoauth2": "1.1.0"
+  }
+}

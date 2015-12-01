@@ -1,0 +1,36 @@
+var config = {};
+
+config.track = {
+    'urls': {
+        'http://exmaple.com/': {
+            selectors: {
+                clientBoxes: '#some .css #selectors',
+            },
+            mail: {
+                subject: 'Mail Subject',
+                body: 'Mail Body'
+            }
+        },
+    }
+}
+
+config.mail = {
+    service: 'gmail',
+    auth: {
+        clientID: '',
+        clientSecret: '',
+        refreshToken: '',
+        gmailUsername: '',
+        timeOut: 1,
+    },
+    info: {
+        to: 'example@domain.com',
+        from: 'example@domain.com',
+    }
+};
+
+config.log = {
+    fileName: 'example.log',
+};
+
+module.exports = config;
