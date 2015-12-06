@@ -1,5 +1,5 @@
 var Crawler = require("crawler");
-var cron = require('cron');
+var cron = require('cron').CronJob;
 var nodemailer = require("nodemailer");
 var winston = require('winston');
 var crypto = require('crypto');
@@ -56,11 +56,11 @@ var c = new Crawler({
                     if (error) {
                         console.log(error);
                     } else {
-                       console.log(Date.now() + " mail sent");
+                        logger.info("mail sent");
                     }
                 });
             }else{
-                console.log(Date.now() + " No Changes.... On " + result.uri);
+                logger.info("No Changes.... On " + result.uri);
             }
         }
 
@@ -68,14 +68,40 @@ var c = new Crawler({
     }
 });
 
-//Changing from console based logging to file
-winston.add(winston.transports.File, { filename: config.log.fileName });
-winston.remove(winston.transports.Console);
+var logger = new (winston.Logger)({
+    transports: [
+        new (winston.transports.Console)({
+            timestamp: function() {
+                var time = new Date();
 
-var cron = cron.job("0 * * * * *", function(){
-    Object.keys(config.track.urls).forEach(function(index) {
-        c.queue(index);
-    });
+                var hour = time.getHours();
+                var minutes = time.getMinutes();
+                var seconds = time.getSeconds();
+
+                return hour + ":" + minutes + ":" + seconds;
+            },
+            formatter: function(options) {
+                // Return string will be passed to logger.
+                return options.timestamp() +' : '+ (undefined !== options.message ? options.message : '') +
+                    (options.meta && Object.keys(options.meta).length ? '\n\t'+ JSON.stringify(options.meta) : '' );
+            }
+        })
+    ]
 });
 
-cron.start();
+//Changing from console based logging to file
+logger.add(winston.transports.File, { filename: config.log.fileName });
+logger.remove(winston.transports.Console);
+
+var job = new cron({
+    cronTime: '0 */59 * * * *',
+    onTick: function(){
+        Object.keys(config.track.urls).forEach(function(index) {
+            c.queue(index);
+        });
+    },
+    start: false,
+    timeZone: 'Europe/London',
+});
+
+job.start();
