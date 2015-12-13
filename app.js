@@ -94,14 +94,14 @@ logger.add(winston.transports.File, { filename: config.log.fileName });
 logger.remove(winston.transports.Console);
 
 var job = new cron({
-    cronTime: '0 */59 * * * *',
+    cronTime: config.cron.time,
     onTick: function(){
         Object.keys(config.track.urls).forEach(function(index) {
             c.queue(index);
         });
     },
-    start: false,
-    timeZone: 'Europe/London',
+    start: config.cron.autoStart,
+    timeZone: config.cron.timezone,
 });
 
 job.start();
