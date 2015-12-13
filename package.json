@@ -4,8 +4,8 @@
   "dependencies": {
     "crawler": "0.4.3",
     "cron": "1.1.0",
-    "winston": "*",
-    "crypto": "*",
+    "winston": "0.4.3`",
+    "crypto": "0.0.3",
     "nodemailer": "1.10.0",
     "nodemailer-smtp-transport": "1.0.4",
     "xoauth2": "1.1.0"
