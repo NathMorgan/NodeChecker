@@ -1,17 +1,23 @@
 var Crawler = require("crawler");
-var cron = require('cron').CronJob;
+var cron = require('cron');
 var nodemailer = require("nodemailer");
 var winston = require('winston');
 var crypto = require('crypto');
+var randomua = require('random-ua');
+
 var config = require('./config');
 
 var pageContents = [];
 
 var c = new Crawler({
     maxConnections : 10,
+    userAgent: function(){
+        if(config.crawler.spoofUA)
+            return randomua.generate();
+    },
     callback : function (error, result, $) {
 
-        var crawlInfo = config.track.urls[result.uri];
+        var crawlInfo = config.crawler.urls[result.uri];
 
         var pageContent = [];
         pageContent[result.uri] = []
@@ -93,10 +99,10 @@ var logger = new (winston.Logger)({
 logger.add(winston.transports.File, { filename: config.log.fileName });
 logger.remove(winston.transports.Console);
 
-var job = new cron({
+var job = new cron.CronJob({
     cronTime: config.cron.time,
     onTick: function(){
-        Object.keys(config.track.urls).forEach(function(index) {
+        Object.keys(config.crawler.urls).forEach(function(index) {
             c.queue(index);
         });
     },
