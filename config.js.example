@@ -6,7 +6,7 @@ config.cron = {
     'autoStart': false,
 }
 
-config.track = {
+config.crawler = {
     'urls': {
         'http://exmaple.com/': {
             selectors: {
@@ -17,7 +17,8 @@ config.track = {
                 body: 'Mail Body'
             }
         },
-    }
+    },
+    'spoofUA': true
 }
 
 config.mail = {
