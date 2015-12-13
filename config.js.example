@@ -1,5 +1,11 @@
 var config = {};
 
+config.cron = {
+    'time': '0 0 */3 * * *',
+    'timezone': 'Europe/London',
+    'autoStart': false,
+}
+
 config.track = {
     'urls': {
         'http://exmaple.com/': {
